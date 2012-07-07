@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 if hash qmake 2> /dev/null; then
   QMAKE_BINARY="qmake"
 elif hash qmake-qt4 2> /dev/null; then
@@ -9,11 +10,11 @@ fi
 
 PLATFORM=`uname -s`
 
-if [ $PLATFORM == "Linux" ]; then
+if [ $PLATFORM = "Linux" ]; then
   SPEC="linux-g++"
-elif [ $PLATFORM == "FreeBSD" ]; then
+elif [ $PLATFORM = "FreeBSD" ]; then
   SPEC="freebsd-g++"
-elif [ $PLATFORM == "Darwin" ]; then
+elif [ $PLATFORM = "Darwin" ]; then
   SPEC="macx-g++"
 else
   echo "The $PLATFORM platform is not currently supported."
