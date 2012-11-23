@@ -38,6 +38,7 @@
 #include "JavascriptAlertMessages.h"
 #include "JavascriptConfirmMessages.h"
 #include "JavascriptPromptMessages.h"
+#include "SetHtml.h"
 
 CommandFactory::CommandFactory(WebPageManager *manager, QObject *parent) : QObject(parent) {
   m_manager = manager;
