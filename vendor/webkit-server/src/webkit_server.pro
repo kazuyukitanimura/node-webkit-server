@@ -54,6 +54,7 @@ HEADERS = \
   GetWindowHandles.h \
   GetWindowHandle.h \
   SetHtml.h \
+  FindText.h \
 
 SOURCES = \
   EnableLogging.cpp \
@@ -109,6 +110,7 @@ SOURCES = \
   GetWindowHandles.cpp \
   GetWindowHandle.cpp \
   SetHtml.cpp \
+  FindText.cpp \
 
 RESOURCES = webkit_server.qrc
 QT += network webkit
