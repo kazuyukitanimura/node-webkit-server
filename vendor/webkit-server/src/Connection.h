@@ -17,7 +17,7 @@ class Connection : public QObject {
     Connection(QTcpSocket *socket, WebPageManager *manager, QObject *parent = 0);
 
   public slots:
-    void commandReady(Command *command);
+    void commandReady(Command *command, QString cbid);
     void finishCommand(Response *response);
     void pendingLoadFinished(bool success);
 
@@ -28,6 +28,7 @@ class Connection : public QObject {
 
     QTcpSocket *m_socket;
     Command *m_queuedCommand;
+    QString m_cbid;
     WebPageManager *m_manager;
     CommandParser *m_commandParser;
     CommandFactory *m_commandFactory;

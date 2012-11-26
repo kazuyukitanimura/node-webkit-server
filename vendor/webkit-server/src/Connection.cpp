@@ -17,12 +17,13 @@ Connection::Connection(QTcpSocket *socket, WebPageManager *manager, QObject *par
   m_pageSuccess = true;
   m_commandWaiting = false;
   connect(m_socket, SIGNAL(readyRead()), m_commandParser, SLOT(checkNext()));
-  connect(m_commandParser, SIGNAL(commandReady(Command *)), this, SLOT(commandReady(Command *)));
+  connect(m_commandParser, SIGNAL(commandReady(Command *, QString)), this, SLOT(commandReady(Command *, QString)));
   connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
 }
 
-void Connection::commandReady(Command *command) {
+void Connection::commandReady(Command *command, QString cbid) {
   m_queuedCommand = command;
+  m_cbid = cbid;
   m_manager->logger() << "Received" << command->toString();
   if (m_manager->isLoading()) {
     m_manager->logger() << command->toString() << "waiting for load to finish";
@@ -69,6 +70,10 @@ void Connection::writeResponse(Response *response) {
     m_socket->write("failure\n");
 
   m_manager->logger() << "Wrote response" << response->isSuccess() << response->message();
+
+  QString cbidLength = QString::number(m_cbid.size()) + "\n";
+  m_socket->write(cbidLength.toAscii());
+  m_socket->write(m_cbid.toUtf8());
 
   QByteArray messageUtf8 = response->message();
   QString messageLength = QString::number(messageUtf8.size()) + "\n";
