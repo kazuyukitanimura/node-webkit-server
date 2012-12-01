@@ -7,8 +7,7 @@ HighlightRender::HighlightRender(WebPageManager *manager, QStringList &arguments
 
 void HighlightRender::start() {
   int width = arguments()[0].toInt();
-  int height = arguments()[1].toInt();
-  QStringList keyWords = arguments()[2].split(QRegExp("\\s+"));
+  QStringList keyWords = arguments()[1].split(QRegExp("\\s+"));
 
   // turn off the scroll bars
   page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
@@ -19,13 +18,12 @@ void HighlightRender::start() {
     page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
   }
 
-  QSize size(width, height);
-  page()->setViewportSize(size);
-
   QSize pageSize = page()->mainFrame()->contentsSize();
   if (pageSize.isEmpty()) {
     emit finished(new Response(false));
   }
+  pageSize.setWidth(width);
+  page()->setViewportSize(pageSize);
 
   QPainter p;
   QImage buffer(pageSize, QImage::Format_ARGB32);
