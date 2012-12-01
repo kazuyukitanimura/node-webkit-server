@@ -8,7 +8,10 @@ HighlightRender::HighlightRender(WebPageManager *manager, QStringList &arguments
 void HighlightRender::start() {
   int width = arguments()[0].toInt();
   int height = arguments()[1].toInt();
-  page()->findText(arguments()[2].toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
+  QStringList keyWords = arguments()[2].split(QRegExp("\\s+"));
+  for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
+    page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
+  }
 
   QSize size(width, height);
   page()->setViewportSize(size);
