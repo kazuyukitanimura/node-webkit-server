@@ -9,6 +9,12 @@ void HighlightRender::start() {
   int width = arguments()[0].toInt();
   int height = arguments()[1].toInt();
   QStringList keyWords = arguments()[2].split(QRegExp("\\s+"));
+
+  // turn off the scroll bars
+  page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+  page()->mainFrame()->setScrollBarPolicy(Qt::Vertical,   Qt::ScrollBarAlwaysOff);
+
+  // highlight the keywords
   for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
     page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
   }
