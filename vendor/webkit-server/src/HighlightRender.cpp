@@ -9,11 +9,13 @@ void HighlightRender::start() {
   int width = arguments()[0].toInt();
   QStringList keyWords = arguments()[1].split(QRegExp("\\s+"));
 
-  // turn off the scroll bars
+  // Turn off the scroll bars
   page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
   page()->mainFrame()->setScrollBarPolicy(Qt::Vertical,   Qt::ScrollBarAlwaysOff);
+  // Set white background
+  page()->setPalette(QPalette(Qt::white));
 
-  // highlight the keywords
+  // Highlight the keywords
   for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
     page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
   }
@@ -27,7 +29,6 @@ void HighlightRender::start() {
 
   QPainter p;
   QImage buffer(pageSize, QImage::Format_ARGB32);
-  buffer.fill(qRgba(255, 255, 255, 0));
   p.begin(&buffer);
   p.setRenderHint( QPainter::Antialiasing,          true);
   p.setRenderHint( QPainter::TextAntialiasing,      true);
