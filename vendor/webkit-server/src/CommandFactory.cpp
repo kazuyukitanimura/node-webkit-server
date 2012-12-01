@@ -40,7 +40,6 @@
 #include "JavascriptPromptMessages.h"
 #include "SetHtml.h"
 #include "FindText.h"
-#include "RenderTile.h"
 
 CommandFactory::CommandFactory(WebPageManager *manager, QObject *parent) : QObject(parent) {
   m_manager = manager;

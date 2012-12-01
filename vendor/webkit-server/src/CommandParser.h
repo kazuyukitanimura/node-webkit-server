@@ -15,7 +15,7 @@ class CommandParser : public QObject {
     void checkNext();
 
   signals:
-    void commandReady(Command *command, QString cbid);
+    void commandReady(Command *command);
 
   private:
     void readLine();
