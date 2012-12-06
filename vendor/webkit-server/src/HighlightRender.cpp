@@ -18,6 +18,7 @@ void HighlightRender::start() {
   // Highlight the keywords
   for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
     page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
+    //page()->handle()->page->markAllMatchesForText((*it).toUtf8(), 1, true, 0);
   }
 
   QSize pageSize = page()->mainFrame()->contentsSize();
