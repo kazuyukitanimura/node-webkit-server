@@ -3628,19 +3628,23 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
 
 bool QWebPage::highlightRect(const QStringList &keyWords)
 {
-    QList<QRect> rectList;
+    Vector<IntRect> rectList;
     for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
-        WebCore::Frame* frame = d->page->mainFrame();
-        if (!frame)
-            continue;
+        //WebCore::Frame* frame = d->page->mainFrame();
+        //if (!frame)
+        //    continue;
 
-        do {
-            frame->editor()->setMarkedTextMatchesAreHighlighted(true);
-            //rectList << 
-            frame->editor()->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
-            frame = frame->tree()->traverseNextWithWrap(false);
-        } while (frame);
+        //do {
+        //    DocumentMarkerController* markers = frame->document()->markers();
+        //    markers->repaintMarkers(DocumentMarker::TextMatch);
+        //    rectList << markers->renderedRectsForMarkers(DocumentMarker::TextMatch);
+        //    WebCore::Editor* editor = frame->editor();
+        //    editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
+        //    frame = frame->tree()->traverseNextWithWrap(false);
+        //} while (frame);
+        d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
     }
+
     return true;
 }
 
