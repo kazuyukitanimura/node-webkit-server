@@ -145,6 +145,8 @@
 #include <QNetworkRequest>
 #include <QList>
 #include <QRect>
+#include "wtf/Vector.h"
+#include "DocumentMarkerController.h"
 #if defined(Q_WS_X11)
 #include <QX11Info>
 #endif
@@ -3628,21 +3630,22 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
 
 bool QWebPage::highlightRect(const QStringList &keyWords)
 {
-    Vector<IntRect> rectList;
+    WTF::Vector<IntRect> rectList;
     for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
-        //WebCore::Frame* frame = d->page->mainFrame();
-        //if (!frame)
-        //    continue;
+        WebCore::Frame* frame = d->page->mainFrame();
+        if (!frame)
+            continue;
 
-        //do {
-        //    DocumentMarkerController* markers = frame->document()->markers();
-        //    markers->repaintMarkers(DocumentMarker::TextMatch);
-        //    rectList << markers->renderedRectsForMarkers(DocumentMarker::TextMatch);
-        //    WebCore::Editor* editor = frame->editor();
-        //    editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
-        //    frame = frame->tree()->traverseNextWithWrap(false);
-        //} while (frame);
-        d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
+        do {
+            WebCore::DocumentMarkerController* markers = frame->document()->markers();
+            markers->repaintMarkers(DocumentMarker::TextMatch);
+            WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(DocumentMarker::TextMatch);
+            rectList.insert(rectList.size(), rectListTmp); // concat
+            WebCore::Editor* editor = frame->editor();
+            editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
+            frame = frame->tree()->traverseNextWithWrap(false);
+        } while (frame);
+        //d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
     }
 
     return true;
