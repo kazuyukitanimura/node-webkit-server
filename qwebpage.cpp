@@ -3637,12 +3637,12 @@ bool QWebPage::highlightRect(const QStringList &keyWords)
             continue;
 
         do {
-            WebCore::DocumentMarkerController* markers = frame->document()->markers();
-            markers->repaintMarkers(DocumentMarker::TextMatch);
-            WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(DocumentMarker::TextMatch);
-            rectList.insert(rectList.size(), rectListTmp); // concat
             WebCore::Editor* editor = frame->editor();
+            editor->setMarkedTextMatchesAreHighlighted(true);
             editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
+            WebCore::DocumentMarkerController* markers = frame->document()->markers();
+            WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(WebCore::DocumentMarker::TextMatch);
+            rectList.insert(rectList.size(), rectListTmp); // concat
             frame = frame->tree()->traverseNextWithWrap(false);
         } while (frame);
         //d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
