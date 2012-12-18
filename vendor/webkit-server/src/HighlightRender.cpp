@@ -10,8 +10,8 @@ void HighlightRender::start() {
   QStringList keyWords = arguments()[1].split(QRegExp("\\s+"));
 
   // Turn off the scroll bars
-  page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-  page()->mainFrame()->setScrollBarPolicy(Qt::Vertical,   Qt::ScrollBarAlwaysOff);
+  //page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+  //page()->mainFrame()->setScrollBarPolicy(Qt::Vertical,   Qt::ScrollBarAlwaysOff);
   // Set white background
   page()->setPalette(QPalette(Qt::white));
 

@@ -147,6 +147,7 @@
 #include <QRect>
 #include "wtf/Vector.h"
 #include "DocumentMarkerController.h"
+#include "platform/ScrollTypes.h"
 #if defined(Q_WS_X11)
 #include <QX11Info>
 #endif
@@ -3637,6 +3638,13 @@ bool QWebPage::highlightRect(const QStringList &keyWords)
             continue;
 
         do {
+            // disable scroll bars
+            if (frame->view()) {
+              frame->view()->setHorizontalScrollbarMode(ScrollbarAlwaysOff, true);
+              frame->view()->setVerticalScrollbarMode(ScrollbarAlwaysOff, true);
+              frame->view()->updateCanHaveScrollbars();
+            }
+
             WebCore::Editor* editor = frame->editor();
             editor->setMarkedTextMatchesAreHighlighted(true);
             editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
