@@ -148,6 +148,7 @@
 #include "wtf/Vector.h"
 #include "DocumentMarkerController.h"
 #include "platform/ScrollTypes.h"
+#include "platform/graphics/Color.h"
 #if defined(Q_WS_X11)
 #include <QX11Info>
 #endif
@@ -3638,11 +3639,15 @@ bool QWebPage::highlightRect(const QStringList &keyWords)
             continue;
 
         do {
-            // disable scroll bars
-            if (frame->view()) {
-              frame->view()->setHorizontalScrollbarMode(ScrollbarAlwaysOff, true);
-              frame->view()->setVerticalScrollbarMode(ScrollbarAlwaysOff, true);
-              frame->view()->updateCanHaveScrollbars();
+            if (WebCore::FrameView* view = frame->view()) {
+              // disable scroll bars
+              view->setHorizontalScrollbarMode(ScrollbarAlwaysOff, true);
+              view->setVerticalScrollbarMode(ScrollbarAlwaysOff, true);
+              view->updateCanHaveScrollbars();
+
+              // set background color to white
+              view->setTransparent(false);
+              view->setBaseBackgroundColor(Color("#FFF"));
             }
 
             WebCore::Editor* editor = frame->editor();

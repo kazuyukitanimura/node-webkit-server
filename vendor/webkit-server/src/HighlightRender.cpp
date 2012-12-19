@@ -13,7 +13,7 @@ void HighlightRender::start() {
   //page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
   //page()->mainFrame()->setScrollBarPolicy(Qt::Vertical,   Qt::ScrollBarAlwaysOff);
   // Set white background
-  page()->setPalette(QPalette(Qt::white));
+  //page()->setPalette(QPalette(Qt::white));
 
   // Highlight the keywords
   //for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
