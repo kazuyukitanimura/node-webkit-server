@@ -3630,7 +3630,7 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
     }
 }
 
-bool QWebPage::highlightRect(const QStringList &keyWords)
+bool QWebPage::highlightRect(const QStringList &keyWords, int width)
 {
     WTF::Vector<IntRect> rectList;
     for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
@@ -3660,6 +3660,11 @@ bool QWebPage::highlightRect(const QStringList &keyWords)
         } while (frame);
         //d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
     }
+
+    WebCore::FrameView* view = d->page->mainFrame()->view();
+    int height = view->contentsHeight();
+    view->resize(width, height);
+    view->adjustViewSize();
 
     return true;
 }

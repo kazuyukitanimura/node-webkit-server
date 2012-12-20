@@ -19,14 +19,15 @@ void HighlightRender::start() {
   //for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
   //  page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
   //}
-  page()->highlightRect(keyWords);
+  page()->highlightRect(keyWords, width);
 
-  QSize pageSize = page()->mainFrame()->contentsSize();
-  if (pageSize.isEmpty()) {
-    emit finished(new Response(false));
-  }
-  pageSize.setWidth(width);
-  page()->setViewportSize(pageSize);
+  //QSize pageSize = page()->mainFrame()->contentsSize();
+  //if (pageSize.isEmpty()) {
+  //  emit finished(new Response(false));
+  //}
+  //pageSize.setWidth(width);
+  //page()->setViewportSize(pageSize);
+  QSize pageSize = page()->viewportSize();
 
   QPainter p;
   QImage buffer(pageSize, QImage::Format_ARGB32);
