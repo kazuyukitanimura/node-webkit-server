@@ -149,6 +149,7 @@
 #include "DocumentMarkerController.h"
 #include "platform/ScrollTypes.h"
 #include "platform/graphics/Color.h"
+#include <QBuffer>
 #if defined(Q_WS_X11)
 #include <QX11Info>
 #endif
@@ -3630,8 +3631,13 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
     }
 }
 
-bool QWebPage::highlightRect(const QStringList &keyWords, int width)
+QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
 {
+    WebCore::FrameView* view = d->page->mainFrame()->view();
+    int height = view->contentsHeight();
+    view->resize(width, height);
+    view->adjustViewSize();
+
     WTF::Vector<IntRect> rectList;
     for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
         WebCore::Frame* frame = d->page->mainFrame();
@@ -3661,12 +3667,27 @@ bool QWebPage::highlightRect(const QStringList &keyWords, int width)
         //d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
     }
 
-    WebCore::FrameView* view = d->page->mainFrame()->view();
-    int height = view->contentsHeight();
-    view->resize(width, height);
-    view->adjustViewSize();
+    QSize pageSize = view->size();
+    QPainter p;
+    QImage buffer(pageSize, QImage::Format_ARGB32);
+    p.begin(&buffer);
+    p.setRenderHint( QPainter::Antialiasing,          true);
+    p.setRenderHint( QPainter::TextAntialiasing,      true);
+    p.setRenderHint( QPainter::SmoothPixmapTransform, true);
+    GraphicsContext context(&p);
+    view->updateLayoutAndStyleIfNeededRecursive();
+    view->paintContents(&context, view->frameRect());
+    p.end();
 
-    return true;
+    // Prepare buffer for writing
+    QByteArray ba;
+    QBuffer b(&ba);
+    bool result = b.open(QIODevice::WriteOnly);
+    // Writing image to the buffer, using PNG encoding
+    result &= buffer.save(&b, "PNG");
+    b.close();
+
+    return ba;
 }
 
 /*!

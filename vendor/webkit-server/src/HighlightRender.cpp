@@ -19,7 +19,7 @@ void HighlightRender::start() {
   //for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
   //  page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
   //}
-  page()->highlightRect(keyWords, width);
+  QByteArray ba = page()->highlightRect(keyWords, width);
 
   //QSize pageSize = page()->mainFrame()->contentsSize();
   //if (pageSize.isEmpty()) {
@@ -27,25 +27,26 @@ void HighlightRender::start() {
   //}
   //pageSize.setWidth(width);
   //page()->setViewportSize(pageSize);
-  QSize pageSize = page()->viewportSize();
+  //QSize pageSize = page()->viewportSize();
 
-  QPainter p;
-  QImage buffer(pageSize, QImage::Format_ARGB32);
-  p.begin(&buffer);
-  p.setRenderHint( QPainter::Antialiasing,          true);
-  p.setRenderHint( QPainter::TextAntialiasing,      true);
-  p.setRenderHint( QPainter::SmoothPixmapTransform, true);
-  page()->mainFrame()->render(&p);
-  p.end();
+  //QPainter p;
+  //QImage buffer(pageSize, QImage::Format_ARGB32);
+  //p.begin(&buffer);
+  //p.setRenderHint( QPainter::Antialiasing,          true);
+  //p.setRenderHint( QPainter::TextAntialiasing,      true);
+  //p.setRenderHint( QPainter::SmoothPixmapTransform, true);
+  //page()->mainFrame()->render(&p);
+  //p.end();
 
-  // Prepare buffer for writing
-  QByteArray ba;
-  QBuffer b(&ba);
-  bool result = b.open(QIODevice::WriteOnly);
-  // Writing image to the buffer, using PNG encoding
-  result &= buffer.save(&b, "PNG");
-  b.close();
+  //// Prepare buffer for writing
+  //QByteArray ba;
+  //QBuffer b(&ba);
+  //bool result = b.open(QIODevice::WriteOnly);
+  //// Writing image to the buffer, using PNG encoding
+  //result &= buffer.save(&b, "PNG");
+  //b.close();
 
   // The IPC cannot send binary, so use base64
-  emit finished(new Response(result, ba.toBase64()));
+  //emit finished(new Response(result, ba.toBase64()));
+  emit finished(new Response(true, ba.toBase64()));
 }
