@@ -3638,8 +3638,8 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
     view->resize(width, height);
     view->adjustViewSize();
 
-    WTF::Vector<IntRect> rectList;
-    for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
+    //WTF::Vector<IntRect> rectList;
+    //for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
         WebCore::Frame* frame = d->page->mainFrame();
         while (frame) {
             if (WebCore::FrameView* view = frame->view()) {
@@ -3655,14 +3655,16 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
 
             WebCore::Editor* editor = frame->editor();
             editor->setMarkedTextMatchesAreHighlighted(true);
-            editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
-            WebCore::DocumentMarkerController* markers = frame->document()->markers();
-            WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(WebCore::DocumentMarker::TextMatch);
-            rectList.insert(rectList.size(), rectListTmp); // concat
+            for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
+              editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
+            }
+            //WebCore::DocumentMarkerController* markers = frame->document()->markers();
+            //WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(WebCore::DocumentMarker::TextMatch);
+            //rectList.insert(rectList.size(), rectListTmp); // concat
             frame = frame->tree()->traverseNextWithWrap(false);
         }
         //d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
-    }
+    //}
 
     QSize pageSize = view->size();
     QPainter p;
