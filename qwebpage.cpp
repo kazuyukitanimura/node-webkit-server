@@ -3641,10 +3641,7 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
     WTF::Vector<IntRect> rectList;
     for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
         WebCore::Frame* frame = d->page->mainFrame();
-        if (!frame)
-            continue;
-
-        do {
+        while (frame) {
             if (WebCore::FrameView* view = frame->view()) {
               // disable scroll bars
               view->setHorizontalScrollbarMode(ScrollbarAlwaysOff, true);
@@ -3663,7 +3660,7 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
             WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(WebCore::DocumentMarker::TextMatch);
             rectList.insert(rectList.size(), rectListTmp); // concat
             frame = frame->tree()->traverseNextWithWrap(false);
-        } while (frame);
+        }
         //d->page->markAllMatchesForText((*it), ::TextCaseInsensitive, true, 0);
     }
 
@@ -3674,7 +3671,7 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
     p.setRenderHint( QPainter::Antialiasing,          true);
     p.setRenderHint( QPainter::TextAntialiasing,      true);
     p.setRenderHint( QPainter::SmoothPixmapTransform, true);
-    GraphicsContext context(&p);
+    WebCore::GraphicsContext context(&p);
     view->updateLayoutAndStyleIfNeededRecursive();
     view->paintContents(&context, view->frameRect());
     p.end();
