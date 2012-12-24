@@ -3631,7 +3631,7 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
     }
 }
 
-QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
+QByteArray QWebPage::highlightRect(const QByteArray &url, const QStringList &keyWords, int width)
 {
     WebCore::FrameView* view = d->page->mainFrame()->view();
     int height = view->contentsHeight();
@@ -3654,7 +3654,7 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
 
       WebCore::Editor* editor = frame->editor();
       editor->setMarkedTextMatchesAreHighlighted(true);
-      for ( QList<QString>::const_iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
+      for ( QList<QString>::const_iterator it = keyWords.constBegin(); it != keyWords.constEnd(); ++it ) {
         editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
       }
       //WebCore::DocumentMarkerController* markers = frame->document()->markers();

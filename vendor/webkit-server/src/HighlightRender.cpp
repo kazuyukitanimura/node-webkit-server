@@ -6,8 +6,9 @@ HighlightRender::HighlightRender(WebPageManager *manager, QStringList &arguments
 }
 
 void HighlightRender::start() {
-  int width = arguments()[0].toInt();
-  QStringList keyWords = arguments()[1].split(QRegExp("\\s+"));
+  QByteArray url = arguments()[0].toUtf8();
+  int width = arguments()[1].toInt();
+  QStringList keyWords = arguments()[2].split(QRegExp("\\s+"));
 
   // Turn off the scroll bars
   //page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
@@ -19,7 +20,7 @@ void HighlightRender::start() {
   //for ( QStringList::Iterator it = keyWords.begin(); it != keyWords.end(); ++it ) {
   //  page()->findText((*it).toUtf8(), (QWebPage::FindFlags) QWebPage::HighlightAllOccurrences);
   //}
-  QByteArray ba = page()->highlightRect(keyWords, width);
+  QByteArray ba = page()->highlightRect(url, keyWords, width);
 
   //QSize pageSize = page()->mainFrame()->contentsSize();
   //if (pageSize.isEmpty()) {
