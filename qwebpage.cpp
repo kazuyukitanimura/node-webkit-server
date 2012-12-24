@@ -143,7 +143,7 @@
 #include <QTouchEvent>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
-#include <QList>
+//#include <QList>
 #include <QRect>
 #include "wtf/Vector.h"
 #include "DocumentMarkerController.h"
