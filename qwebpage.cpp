@@ -143,7 +143,6 @@
 #include <QTouchEvent>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
-//#include <QList>
 #include <QRect>
 #include "wtf/Vector.h"
 #include "DocumentMarkerController.h"
@@ -3633,13 +3632,18 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
 
 QByteArray QWebPage::highlightRect(const QByteArray &url, const QStringList &keyWords, int width)
 {
-    WebCore::FrameView* view = d->page->mainFrame()->view();
+    // load url
+    WebCore::Frame* frame = d->page->mainFrame();
+    WebCore::ResourceRequest request(url);
+    request.setHTTPMethod("GET");
+    frame->loader()->load(WebCore::FrameLoadRequest(frame, request));
+
+    WebCore::FrameView* view = frame->view();
     int height = view->contentsHeight();
     view->resize(width, height);
     view->adjustViewSize();
 
     //WTF::Vector<IntRect> rectList;
-    WebCore::Frame* frame = d->page->mainFrame();
     while (frame) {
       if (WebCore::FrameView* view = frame->view()) {
         // disable scroll bars
