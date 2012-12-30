@@ -3662,6 +3662,12 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
       for (int i = 0; i < rectListTmp.size(); i++) {
         WebCore::IntRect r = rectListTmp.at(i);
         qDebug() << "x: " << r.x() << ", y: " << r.y() << ", maxX: " << r.maxX() << ", maxY: " << r.maxY() << "\n";
+        // Algorithm to check the boundary O(N log N)
+        // 1. sort by y
+        // 2. start checking from the rect that has the smallest y
+        //  2.1. if maxY of the rect is inside the boundary, mark it and goto step 2; othersize goto step 3
+        // 3. the rect(s) in the boundary are the marked rects
+        // 4. from the next time, step 2 should start from unmarked rects
       }
       frame = frame->tree()->traverseNextWithWrap(false);
     }
