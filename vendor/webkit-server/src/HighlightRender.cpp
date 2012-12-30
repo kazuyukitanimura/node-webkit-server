@@ -8,7 +8,6 @@ HighlightRender::HighlightRender(WebPageManager *manager, QStringList &arguments
 void HighlightRender::start() {
   int i = 0;
 
-  QString url = arguments()[i++];
   int width = arguments()[i++].toInt();
   QStringList keyWords = arguments()[i++].split(QRegExp("\\s+"));
 
