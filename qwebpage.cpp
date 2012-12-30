@@ -3630,15 +3630,9 @@ bool QWebPage::findText(const QString &subString, FindFlags options)
     }
 }
 
-QByteArray QWebPage::highlightRect(const QString &url, const QStringList &keyWords, int width)
+QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
 {
-    // load url
     WebCore::Frame* frame = d->page->mainFrame();
-    //WebCore::ResourceRequest request(url);
-    //request.setHTTPMethod("GET");
-    //frame->loader()->load(WebCore::FrameLoadRequest(frame, request));
-    frame->loader()->load(WebCore::ResourceRequest(url), false);
-
     WebCore::FrameView* view = frame->view();
     int height = view->contentsHeight();
     view->resize(width, height);
