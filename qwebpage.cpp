@@ -3656,9 +3656,13 @@ QByteArray QWebPage::highlightRect(const QStringList &keyWords, int width)
       for ( QList<QString>::const_iterator it = keyWords.constBegin(); it != keyWords.constEnd(); ++it ) {
         editor->countMatchesForText((*it), 0, ::CaseInsensitive, 0, true);
       }
-      //WebCore::DocumentMarkerController* markers = frame->document()->markers();
-      //WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(WebCore::DocumentMarker::TextMatch);
+      WebCore::DocumentMarkerController* markers = frame->document()->markers();
+      WTF::Vector<IntRect> rectListTmp = markers->renderedRectsForMarkers(WebCore::DocumentMarker::TextMatch);
       //rectList.insert(rectList.size(), rectListTmp); // concat
+      for (int i = 0; i < rectListTmp.size(); i++) {
+        WebCore::IntRect r = rectListTmp.at(i);
+        qDebug() << "x: " << r.x() << ", y: " << r.y() << ", maxX: " << r.maxX() << ", maxY: " << r.maxY() << "\n";
+      }
       frame = frame->tree()->traverseNextWithWrap(false);
     }
 
